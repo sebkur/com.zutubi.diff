@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'maven'
 
 ext {
   pulseBuild = System.getenv('PULSE_BUILD_NUMBER')
@@ -8,7 +9,7 @@ ext {
 }
 
 group = 'com.zutubi.diff'
-version = '3.0.' + build
+version = '3.0.1-topobyte'
 sourceCompatibility = 1.5
 
 repositories {
@@ -19,3 +20,19 @@ dependencies {
     testCompile('junit:junit:4.8.+')
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+	    repository(url: maven_url_topobyte_temp)
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
